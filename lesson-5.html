@@ -1,0 +1,281 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Урок 5. Подзапросы</title>
+   <link rel="stylesheet" type="text/css" href="css/reset.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+   <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+   <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+   <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+         <div class="container">
+            <a class="navbar-brand" href="index.html">
+               <img class="logo" src="img/logo1.svg" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav m-auto">
+                  <li class="nav-item">
+                     <a class="nav-link" href="index.html">Главная</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Уроки
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                        <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                        <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                        <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                        <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                        <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                        <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                        <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Тесты
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                        <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                        <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                        <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                        <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="other.html">Прочее</a>
+                  </li>
+               </ul>
+               <?php if(!isset($_SESSION['user'])): ?>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+               </form>
+               <?php else: ?>
+               <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+                  <?php
+              foreach ($_SESSION['user'] as $name => $value) {
+                $name = htmlspecialchars($name);
+                $value = htmlspecialchars($value);
+                $user[$name] = $value;
+              }
+            ?>
+                  <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;"
+                     width="20px" height="20px" alt="">
+                  <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+               </a>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+               </form>
+               <?php endif; ?>
+               </form>
+            </div>
+         </div>
+      </nav>
+   </header>
+   <section class="bg-light" id="top">
+      <div class="container">
+         <div class="row">
+            <h2 class="test-head">Урок 5. Подзапросы</h2>
+         </div>
+         <div class="row justify-content-center">
+            <div class="lesson col-12 mt-4 mb-5">
+               <div class="card card-body">
+                  <div class="lesson-text">
+                     <p><span class="highlight-text">Подзапрос</span> – это оператор <span>SELECT</span>, включенный в
+                        спецификацию другого оператора SQL. Также их называют вложенными запросами.</p>
+
+                     <p class="text-title">Подзапросы в SELECT</p>
+
+                     <p>В выражении <span>SELECT</span> мы можем вводить подзапросы четырьмя способами:</p>
+
+                     <div class="list important-text">
+                        <p>1. В условии в выражении <span>WHERE</span></p>
+
+                        <p>2. В условии в выражении <span>HAVING</span></p>
+
+                        <p>3. В качестве таблицы для выборки в выражении <span>FROM</span></p>
+
+                        <p>4. В качестве спецификации столбца в выражении <span>SELECT</span></p>
+                     </div>
+
+                     <p>Рассмотрим некоторые из этих случаев. Например, получим все товары, у которых цена выше средней:
+                     </p>
+
+                     <p><span class="highlight-code">
+                           SELECT * FROM Products <br>
+                           WHERE Price > (SELECT AVG(Price) FROM Products)</span><br></p>
+
+                     <p>Чтобы получить нужные товары, нам вначале надо выполнить подзапрос на получение средней цены
+                        товара:
+                     <p><span class="highlight-code">SELECT AVG(Price) FROM Products.</span></p>
+                     </p>
+
+                     <p class="text-title">Оператор IN</p>
+
+                     <p>Нередко подзапросы применяются вместе с оператором <span>IN</span>, который выбирает из набора
+                        значений. И подзапрос как раз может предоставить требуемый набор значений. Например, выберем все
+                        товары из таблицы Products, на которые есть заказы в таблице Orders:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM Products WHERE Id IN (SELECT Product Id FROM
+                           Orders)</span></p>
+
+                     <p>То есть подзапрос в данном случае выбирает все идентификаторы товаров из Orders, затем по этим
+                        идентификаторам извлекаютcя товары из Products.</p>
+
+                     <p>Добавив оператор <span>NOT</span>, мы можем выбрать те товары, на которые нет заказов в таблице
+                        Orders:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM Products WHERE Id NOT IN (SELECT Product Id FROM
+                           Orders)</span></p>
+
+                     <p class="text-title">Получение набора значений</p>
+
+                     <p>При использовании в операторах сравнения подзапросы должны возвращать одно скалярное значение.
+                        Но иногда возникает необходимость получить набор значений. Чтобы при использовании в операторах
+                        сравнения подзапрос мог возвращать набор значений, перед ним необходимо использовать один из
+                        операторов: <span>ALL</span>, <span>SOME</span> или <span>ANY</span>.</p>
+
+                     <p>При использовании ключевого слова <span>ALL</span> условие в операции сравнения должно быть
+                        верно для всех значений, которые возвращаются подзапросом. Например, найдем все товары, цена
+                        которых меньше чем у любого товара фирмы Apple:</p>
+
+                     <p><span class="highlight-code">SELECT * <br>FROM Products <br>WHERE Price < ALL (SELECT Price FROM
+                              Products WHERE Manufacturer='Apple' )</span>
+                     </p>
+
+                     <p>Если бы мы в данном случае опустили бы ключевое слово <span>ALL</span>, то мы бы столкнулись с
+                        ошибкой.</p>
+
+                     <p>Допустим, если данный подзапрос возвращает значения <span class="highlight-text">vаl1, val2 и
+                           val3</span>, то условие фильтрации фактически было бы аналогично объединению этих значений
+                        через оператор <span>AND</span>:</p>
+
+                     <p><span class="highlight-code">WHERE Price < val1 AND Price < val2 AND Price < val3</span>
+                     </p>
+
+                     <p>В тоже время подобный запрос гораздо проще переписать другим образом:</p>
+
+                     <p><span class="highlight-code">SELECT *<br>FROM Products<br>WHERE Price < (SELECT MIN(Price) FROM
+                              Products WHERE Manufacturer='Apple' )</span>
+                     </p>
+
+                     <p>Как работает оператор <span>ALL</span>:</p>
+
+                     <div class="list important-text">
+                        <p><span>x > ALL (1, 2)</span> эквивалентно <span>x > 2</span></p>
+
+                        <p><span>x < ALL (1, 2)</span> эквивалентно <span>x < 1</span>
+                        </p>
+
+                        <p><span>x = ALL (1, 2)</span> эквивалентно <span>(x = 1) AND (x = 2)</span></p>
+
+                        <p><span>x <> ALL (1, 2)</span> эквивалентно <span>x NOT IN (1, 2)</span></p>
+                     </div>
+
+                     <p>
+                        Операторы <span>ANY</span> и <span>SOME</span> условие в операции сравнения должно быть истинным
+                        для хотя бы одного из значений, возвращаемых подзапросом. По своему действию оба этих оператора
+                        аналогичны, поэтому можно применять любой из них. Например, в следующем случае получим товары,
+                        которые стоят меньше самого дорогого товара компании Apple:</p>
+
+                     <p><span class="highlight-code">SELECT *<br>FROM Products<br>WHERE Price < ANY(SELECT Price FROM
+                              Products WHERE Manufacturer='Apple' )</span>
+                     </p>
+
+                     <p>И также стоит отметить, что данный запрос можно сделать проще, переписав следующим образом:</p>
+
+                     <p><span class="highlight-code">SELECT *<br>FROM Products<br>WHERE Price < (SELECT MAX(Price) FROM
+                              Products WHERE Manufacturer='Apple' )</span>
+                     </p>
+
+                     <p>Как работает оператор <span>ANY</span> (а также <span>SOME</span>):</p>
+
+                     <div class="list important-text">
+                        <p><span>x > ANY (1, 2)</span> эквивалентно <span>x > 1</span></p>
+
+                        <p><span>x < ANY (1, 2)</span> эквивалентно <span>x < 2</span>
+                        </p>
+
+                        <p><span>x = ANY (1, 2)</span> эквивалентно <span>x NOT (1, 2)</span></p>
+
+                        <p><span>x <> ANY (1, 2)</span> эквивалентно <span>(x <> 1) OR (x <> 2)</span></p>
+                     </div>
+                     <p class="text-title">Подзапросы в команде INSERT</p>
+
+                     <p>В команде <span>INSERT</span> подзапросы могут применяться для определения значения, которое
+                        вставляется в один из столбцов:</p>
+
+                     <p><span class="highlight-code">INSERT INTO Orders (ProductId, CreatedAt, ProductCount, Price)<br>
+                           VALUES <br>
+                           ( <br>
+                           &nbsp;&nbsp;&nbsp;(SELECT Id FROM Products WHERE ProductName='Galaxy S8'), <br>
+                           &nbsp;&nbsp;&nbsp;'2018-05-23', <br>
+                           &nbsp;&nbsp;&nbsp;2, <br>
+                           &nbsp;&nbsp;&nbsp;(SELECT Price FROM Products WHERE ProductName='Galaxy S8')<br>
+                           )<br>
+                        </span></p>
+
+                     <p class="text-title">Подзапросы в команде UPDATE</p>
+
+
+                     <p>В команде <span>UPDATE</span> подзапросы могут применяться:</p>
+
+                     <div class="list important-text">
+                        <p>1. В качестве устанавливаемого значения после оператора <span>SET</span></p>
+
+                        <p>2. Как часть условия в выражении <span>WHERE</span></p>
+                     </div>
+
+                     <p>Так, увеличим в таблице Orders количество купленных товаров компании Apple на 2:</p>
+
+                     <p><span class="highlight-code">UPDATE Orders <br>
+                           SET ProductCount = ProductCount + 2 <br>
+                           WHERE ProductId IN (SELECT Id FROM Products WHERE Manufacturer='Apple');<br></span></p>
+
+                     <p class="text-title">Подзапросы в команде DELETE</p>
+
+                     <p>В команде <span>DELETE</span> подзапросы также применяются как часть условия. Так, удалим все
+                        заказы на Galaxy S8:</p>
+
+                     <p><span class="highlight-code">DELETE FROM Orders <br>
+                           WHERE ProductId = (SELECT Id FROM Products WHERE ProductName='Galaxy S8'); <br></span></p>
+                  </div>
+               </div>
+               <div class="navigation-text">
+                  <a href="lesson-4.html"><i class="fa fa-long-arrow-left"></i> Урок 4. Соединение JOIN</a>
+                  <a href="lesson-6.html"> Урок 6. Операторы CREATE TABLE и INSERT <i
+                        class="fa fa-long-arrow-right"></i></a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+         <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+   </footer>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/main.js"></script>
+</body>
+</html>

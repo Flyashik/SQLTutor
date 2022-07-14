@@ -1,0 +1,280 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Урок 2. Оператор SELECT</title>
+   <link rel="stylesheet" type="text/css" href="css/reset.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+   <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+   <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+   <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+         <div class="container">
+            <a class="navbar-brand" href="index.html">
+               <img class="logo" src="img/logo1.svg" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav m-auto">
+                  <li class="nav-item">
+                     <a class="nav-link" href="index.html">Главная</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Уроки
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                        <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                        <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                        <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                        <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                        <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                        <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                        <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Тесты
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                        <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                        <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                        <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                        <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="other.html">Прочее</a>
+                  </li>
+               </ul>
+               <?php if(!isset($_SESSION['user'])): ?>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+               </form>
+               <?php else: ?>
+               <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+                  <?php
+                     foreach ($_SESSION['user'] as $name => $value) {
+                        $name = htmlspecialchars($name);
+                        $value = htmlspecialchars($value);
+                        $user[$name] = $value;
+                     }
+                  ?>
+                  <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;"
+                     width="20px" height="20px" alt="">
+                  <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+               </a>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+               </form>
+               <?php endif; ?>
+               </form>
+            </div>
+         </div>
+      </nav>
+   </header>
+   <section class="bg-light" id="top">
+      <div class="container">
+         <div class="row">
+            <h2 class="test-head">Урок 2. Оператор SELECT</h2>
+         </div>
+         <div class="row justify-content-center">
+            <div class="lesson col-12 mt-4 mb-5">
+               <div class="card card-body">
+                  <div class="lesson-text">
+                     <p>Оператор <span>SELECT</span> является фактически основным и самым сложным оператором SQL. Он
+                        предназначен для выборки данных из таблиц, именно он и реализует одно их основных назначение
+                        базы данных – предоставлять по запросу информацию из базы данных пользователю. Поскольку язык
+                        SQL является не процедурным, а декларативным, оператор <span>SELECT</span> предназначен для
+                        того, чтобы описать какие данные должны быть получены из базы данных в результате выполнения
+                        запроса.</p>
+
+                     <p>Для начального ознакомления рассмотрим упрощенную форму оператора:</p>
+
+                     <div class="command">
+                        SELECT <br>
+                        [FIRST (m)] [SKIP (п)] [DISTINCT | ALL] <br>
+                        "список столбцов" | * <br>
+                        &nbsp;&nbsp;&nbsp;FROM "таблица" ["алиас"] | "процедура" ["алиас"] | <br>
+                        &nbsp;&nbsp;&nbsp;"просмотр" ["алиас"] | "соединение таблиц" <br>
+                        [WHERE "условия отбора строк"] <br>
+                        [GROUP BY "список столбцов для группировки" <br>
+                        &nbsp;&nbsp;&nbsp;[HAVING "условия отбора групп"]] <br>
+                        [UNION "оператор select" [ALL]] <br>
+                        [ORDER BY "список сортировки"] <br>
+                     </div>
+
+                     <p>Данный запрос используется в случае, если нам нужно показать данные в таблице. Наверное, самым
+                        простым примером использования <span>SELECT</span> будет следующий запрос:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM workers</span></p>
+
+                     <p>Результатом данного запроса будет таблица со всеми данными в таблице <span>workers</span>. Знак
+                        звёздочки <span>*</span> означает то, что мы хотим показать все столбцы из таблицы без
+                        исключений. Так как в базе данных обычно больше одной таблицы, нам необходимо указывать название
+                        таблицы, данные из которой мы хотим посмотреть. Сделать это мы можем, используя ключевое слово
+                        <span>FROM</span>.</p>
+
+                     <p>Когда вам нужны лишь некоторые столбцы из таблицы, то вы можете указать их имена через запятую
+                        вместо звёздочки.</p>
+
+                     <p><span class="highlight-code">SELECT name, salary FROM workers</span></p>
+
+                     <p>Также иногда нам нужно отсортировать выводимые данные. Для этого мы используем <span>ORDER BY
+                           "название столбца"</span>. <span>ORDER BY</span> имеет два модификатора: <span>ASC</span> (по
+                        возрастанию) (по умолчанию) и <span>DESC</span> (по убыванию)</p>
+
+                     <p><span class="highlight-code">SELECT name, salary FROM workers ORDER BY name DESC</span></p>
+
+                     <p class="text-title">WHERE</p>
+
+                     <p>Теперь мы знаем, как показать только конкретные столбцы, но что если мы хотим включить в вывод
+                        лишь некоторые конкретные строки? Для этого мы используем WHERE. Данное ключевое слово позволяет
+                        нам фильтровать данные по определённому условию.</p>
+
+                     <p>В следующем запросе мы выведем только тех работников, страна которых Россия.</p>
+
+                     <p><span class="highlight-code">
+                           SELECT *<br>
+                           FROM workers <br>
+                           WHERE country = 'Russia'; <br>
+                        </span></p>
+
+                     <p class="text-title">AND/OR</p>
+
+                     <p>Условия в <span>WHERE</span> могут быть написаны с использованием логических операторов
+                        <span>(AND/OR)</span> и математические операторы сравнения <span>(=, <,>, <=,>=, <>)</span>.</p>
+
+                     <p>К примеру, у нас есть табличка, в которой записаны данные о 4 самых продаваемых музыкальных
+                        альбомах всех времён. Давайте выведем только те, жанром которых является рок, а продажи были
+                        меньше, чем 50 миллионов копий.</p>
+
+                     <p><span class="highlight-code">
+                           SELECT *<br>
+                           FROM albums<br>
+                           &nbsp;&nbsp;&nbsp;WHERE genre = 'rock' AND <br>
+                           &nbsp;&nbsp;&nbsp;sales_in_millions <= 50<br>
+                              ORDER BY released<br>
+                        </span></p>
+
+                     <p class="text-title">IN/BETWEEN/LIKE</p>
+
+                     <p>Условия в WHERE могут быть записаны с использованием ещё нескольких команд, которыми являются:
+                     </p>
+
+                     <p>В следующем запросе мы выведем только тех работников, страна которых Россия.</p>
+
+                     <p><span class="highlight-code">
+                           SELECT *<br>
+                           FROM workers <br>
+                           WHERE country = 'Russia'; <br>
+                        </span></p>
+
+
+                     <div class="list important-text">
+                        <p>· <span>IN</span> - сравнивает значение в столбце с несколькими возможными значениями и
+                           возвращает true, если значение совпадает хотя бы с одним значением</p>
+                        <p>· <span>BETWEEN</span> - проверяет, находится ли значение в каком-то промежутке</p>
+                        <p>· <span>LIKE</span> - ищет по шаблон</p>
+                     </div>
+
+                     <p>К примеру, мы можем сделать запрос для вывода данных об альбомах в жанре pop или soul:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM albums WHERE genre IN ('pop','soul');</span></p>
+
+                     <p>Если мы хотим вывести все альбомы, которые были выпущены в промежутке между 1975 и 1985 годом,
+                        мы можем использовать следующую запись:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM albums WHERE released BETWEEN 1975 AND 1985;</span>
+                     </p>
+
+                     <p>Также, если мы хотим вывести все альбомы, в названии которых есть буква 'R', мы можем
+                        использовать следующую запись:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM albums WHERE album LIKE '%R%';</span></p>
+
+                     <p>Знак % означает любую последовательность символов (0 символов тоже считается за
+                        последовательность).</p>
+
+                     <p>Если мы хотим вывести все альбомы, первая буква в названии которых - 'R', то запись слегка
+                        изменится:</p>
+
+                     <p><span class="highlight-code">SELECT * FROM albums WHERE album LIKE 'R%';</span></p>
+
+                     <p>В SQL также есть инверсия. Для примера, попробуйте самостоятельно написать <span>NOT</span>
+                        перед любым логическим выражением в условии (<span>NOT BETWEEN</span> и так далее).</p>
+
+                     <p class="text-title">Функции</p>
+
+                     <p>В SQL полно встроенных функций для выполнения разных операций. Мы же покажем вам только наиболее
+                        часто используемые:</p>
+
+                     <div class="list important-text">
+                        <p>· <span>COUNT</span>() - возвращает число строк</p>
+
+                        <p>· <span>SUM()</span> - возвращает сумму всех полей с числовыми значениями в них</p>
+
+                        <p>· <span>AVG()</span> - возвращает среднее значение среди строк</p>
+
+                        <p>· <span>MIN()/MAX()</span> - возвращает минимальное/максимальное значение среди строк</p>
+                     </div>
+
+                     <p>Чтобы вывести год выпуска самого старого альбома, в таблице можно использовать следующий запрос:
+                     </p>
+
+                     <p><span class="highlight-code">SELECT MIN(released) FROM albums;</span></p>
+
+                     <p>Обратите внимание, что если вы напишете запрос, в котором вам, к примеру, нужно будет вывести
+                        имя и среднее значение чего-либо, то вы получите ошибку на выводе.</p>
+
+                     <p>Допустим, вы пишете такой запрос:</p>
+
+                     <p><span class="highlight-code">SELECT name, avg(age) FROM students;</span></p>
+
+                     <p>Чтобы избежать ошибки, вам следует добавить следующую строку:</p>
+
+                     <p><span class="highlight-code">GROUP BY name</span></p>
+
+                     <p>Причиной тому является, что запись <span>avg(age)</span> является совокупной
+                        (<span>aggregated</span>), и вам необходимо группировать значения по имени.</p>
+
+                     <p>Подробнее о GROUP BY будет рассказано в следующем уроке.</p>
+
+                  </div>
+               </div>
+               <div class="navigation-text">
+                  <a href="lesson-1.html"><i class="fa fa-long-arrow-left"></i> Урок 1. Введение в SQL</a>
+                  <a href="lesson-3.html"> Урок 3. Группировка GROUP BY<i class="fa fa-long-arrow-right"></i></a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+         <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+   </footer>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/main.js"></script>
+</body>
+</html>

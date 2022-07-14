@@ -1,0 +1,242 @@
+<?php session_start(); ?>
+<?php if(!isset($_SESSION['user'])) 
+          header('Location: /sign-in.html');
+  ?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Курс по SQL</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+  <!-- Favicon -->
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img class="logo" src="img/logo1.svg" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav m-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Главная</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Уроки
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Тесты
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                <a class="dropdown-item" href="test-5.html">Тест 5</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="other.html">Прочее</a>
+            </li>
+          </ul>
+          <?php if(!isset($_SESSION['user'])): ?>
+          <form class="form-inline my-2 my-lg-0">
+            <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+          </form>
+          <?php else: ?>
+          <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none;">
+            <?php
+              foreach ($_SESSION['user'] as $name => $value) {
+                $name = htmlspecialchars($name);
+                $value = htmlspecialchars($value);
+                $user[$name] = $value;
+              }
+              $image_url = $user['image_url'];
+            ?>
+            <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;" width="20px"
+              height="20px" alt="">
+            <div class="user-name" style="display: inline-block">
+              <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+            </div>
+          </a>
+          <form class="form-inline my-2 my-lg-0">
+            <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+          </form>
+          <?php endif; ?>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <section id="top" class="bg-light">
+    <div class="container">
+      <div class="main-body">
+        <div class="row gutters-sm">
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                  <form action="blocks/upload_images.php" method="post" enctype="multipart/form-data">
+                    <div style="background-image: url('upload/<?=$image_url?>')" class="user-avatar"></div>
+                    <input class="form-control" type="file" name="image" required>
+                    <button class="btn btn-primary px-4" type="submit"
+                      style="margin-top: 10px; background-color:#fa4e33">Загрузить</button>
+                  </form>
+                  <?php if(isset($_COOKIE['error'])) echo $_COOKIE['error']; ?>
+                  <?php if($user['image_url'] != 'user-default.png'): ?>
+                  <form action="blocks/delete_image.php">
+                    <button class="btn btn-primary px-4" id="btn-delete" type="submit"
+                      style="margin-top: 10px; background-color:#fa4e33">Удалить</button>
+                  </form>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card">
+              <div class="card-body">
+                <form action="blocks/user_changes.php" method="post">
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Имя</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" class="form-control" id="first-name" name="first-name"
+                        value="<?=$user['first-name']?>" placeholder="Имя" minlength="2" maxlength="30">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Фамилия</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" class="form-control" id="second-name" name="second-name"
+                        value="<?=$user['second-name']?>" placeholder="Фамилия" minlength="2" maxlength="30">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Дата рождения</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="date" class="form-control" id="birthdate" name="birthdate"
+                        value="<?=$user['birthdate']?>" min="1920-01-01" max="2020-01-01">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Страна</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input list="countries" id="country" name="country" class="form-control" value="<?=$user['country']?>" placeholder="Укажите страну" minlength="2" maxlength="50">
+                      <datalist id="countries">
+                        
+                      </datalist>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Город</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input list="cities" id="city" name="city" class="form-control" value="<?=$user['city']?>" placeholder="Укажите город" minlength="2" maxlength="30">
+                      <datalist id="cities">
+
+                      </datalist>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Веб-сайт</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" id="website" name="website" class="form-control" value="<?=$user['website']?>">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Github</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" id="github" name="github" class="form-control" value="<?=$user['github']?>">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Twitter</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" id="twitter" name="twitter" class="form-control" value="<?=$user['twitter']?>">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Instagram</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" id="instagram" name="instagram" class="form-control"
+                        value="<?=$user['instagram']?>">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-9 text-secondary">
+                      <button type="submit" class="btn btn-primary px-4" style="background-color: #fa4e33;">Сохранить
+                        изменения</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="row" style="margin-top: 20px">
+                  <div class="col-sm-3"></div>
+                  <div class="col-sm-9 text-secondary">
+                    <a href="blocks/delete_account.php" id="btn-delete-account" class="btn btn-primary px-4" style="background-color: #fa4e33;">Удалить профиль</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="bg-light text-center m-0 p-5">
+    <img class="mb-1 mt-4" width="200" src="img/logo1.svg">
+    <a href="#top" class="nav-link">Вернуться наверх</a>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/option_countries.js"></script>
+  <script src="js/confirm_delete.js"></script>
+</body>
+
+</html>

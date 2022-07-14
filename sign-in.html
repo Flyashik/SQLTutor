@@ -1,0 +1,72 @@
+<?php session_start(); ?>
+<?php if (isset($_SESSION['user']))
+  header('Location: /');
+?>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sign In</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+  <link rel="stylesheet" type="text/css" href="css/animate.css">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+  <!-- Favicon -->
+</head>
+
+<body>
+  <div class="wrap bg-light" id="center-form-section">
+    <form action="blocks/sign_in_script.php" method="post"
+      class="form-sign-in col-12 col-sm-6 col-md-5 col-lg-4 col-xl-2 m-auto text-center">
+      <input type="hidden" name="sign_form_id" value="0">
+      <a href="index.html">
+        <img class="mb-5" src="img/logo2.svg" width="80" alt="">
+      </a>
+      <h3 class="h3 font-weight-bold mb-4">Авторизация</h3>
+      <?php
+        if(isset($_SESSION['confirmed'])){
+          echo '<small style="color: green">' . $_SESSION['confirmed'] . '</small>';
+          unset($_SESSION['confirmed']);
+        }
+      ?>
+      <div class="form-group mb-2">
+        <input type="login" class="form-control" id="login" name="login" placeholder="Логин" required>
+      </div>
+      <div class="form-group mb-4">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
+        <?php if(!isset($_SESSION['pass_upd'])): ?>
+        <a href="recovery-password.html" style="float: left; font-size: 15px;">Забыли пароль?</a>
+        <?php else: ?>
+        <?php 
+          echo '<small style="color: green">' . $_SESSION['pass_upd'] . '</small>';
+          unset($_SESSION['pass_upd']);
+        ?>
+        <?php endif; ?>
+      </div>
+      <?php if (isset($_SESSION['errors']['logpass'])) {
+        echo '<small style="color: red">' . $_SESSION['errors']['logpass'] . '</small>';
+        unset($_SESSION['errors']['logpass']);
+      } 
+      ?>
+      <button class="btn btn-lg send-btn btn-block" id="accept-button" type="submit" disabled>Войти</button>
+      <div class="form-group mt-4">
+        Нет аккаунта? <a href="sign-up.html">Зарегистрироваться</a>
+      </div>
+    </form>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/input_text_checker.js"></script>
+  <?php 
+    if(isset($_SESSION['errors']))
+      unset($_SESSION['errors']);
+  ?>
+</body>
+
+
+</html>

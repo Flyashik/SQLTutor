@@ -1,0 +1,394 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('../fa/css/font-awesome.css');
+
+
+body {
+    font-family: 'IBM Plex Sans', Verdana, sans-serif;
+    color: #333;
+}
+section {
+    padding: 90px 0;
+}
+h1, h2, h3 {
+    font-family: 'IBM Plex Sans', 'Tahoma', sans-serif;
+    font-weight: 600;
+    color: #494949;
+    line-height: 1.2;
+}
+h1 {
+    font-size: 4rem;
+}
+h2 {
+    font-size: 3rem;
+}
+h3 {
+    font-size: 2rem;
+}
+.test-head {
+    padding-left: 15px;
+    margin: 80px 0 0;
+    color: #494949;
+    font-size: 2.5rem;
+}
+.question-title {
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.bg-blue-2 {
+    background-color: #3d7ac3;
+}
+.bg-light {
+    background-color: #fbfbfb!important;
+}
+
+
+/* Navbar */
+
+.navbar {
+    box-shadow: 0 1px 8px #00000014;
+}
+.logo {
+    width: 160px;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: 0;
+    border-radius: 0;
+}
+.navbar .btn {
+    background-color: #eeeeee;
+    border-bottom: 3px solid #cecece;
+    color: #333;
+}
+
+#main-screen {
+    background: url('../img/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0 70px;
+}
+
+.hero {
+    width: 100%;
+    text-align: center;
+    padding: 90px 0 70px;
+}
+.hero-text h1 {
+    line-height: 1.5;
+    font-size: 3rem;
+}
+
+.hero img {
+    width: 300px;
+}
+.hero-text h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: italic;
+    font-weight: 400;
+    text-transform: lowercase;
+    color: #ec7562;
+}
+.btn-try {
+    color: #fff;
+    background-color: #1b1b2f;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.1s;
+    border: 2px solid transparent;
+}
+.btn-try:hover {
+    color: #fff;
+    background-color: #1f4068;
+    border: 2px solid #e43f5a;
+}
+.bottom-sub {
+    position: absolute;
+    bottom: 0px;
+}
+.bottom-sub img {
+    opacity: .6;
+    width: 50%;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+.about-text {
+    font-size: 1.2rem;
+}
+.about-img {
+    box-shadow: 0 10px 120px #0000000d;
+}
+
+
+.card {
+    border: 0;
+    border-radius: 0;
+    overflow: hidden;
+    transition: .3s;
+}
+.card-body {
+    padding: 2.5rem 2rem;
+}
+.card-text {
+    color:#333;
+}
+
+.form-control {
+    font-weight: 500;
+    color: #162447;
+    border: 1px solid #ececec;
+}
+
+#center-form-section {
+    padding: 80px 0;
+    min-height: 100vh;
+    display: flex;
+}
+#center-form-section h3 {
+    color: #494949;
+}
+
+ .lesson .card {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.lesson-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+p.text-title {
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+}
+
+.highlight-text {
+    background: #fff9d2;
+}
+
+.highlight-code {
+    background: #fff9d2;
+    font-family: 'IBM Plex Mono', sans-serif;
+}
+
+.command {
+    background: #eee;
+    color: #444;
+    padding: 15px 20px;
+    margin: 20px 0;
+    line-height: 1.8;
+    font-family: 'IBM Plex Mono', sans-serif;
+}
+
+.lesson-text span:not(.highlight-text, .highlight-code), .lesson-text span b {font-family: 'IBM Plex Mono', monospace;font-weight: 600;}
+
+.important-text {
+    padding-left: 20px;
+    border-left: 5px solid #ffd8bf;
+    margin: 20px 0;
+}
+
+.list {
+    padding-left: 20px;
+    margin: 20px 0;
+}
+
+/* Testing */
+
+.question .card {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: .3s;
+}
+
+.question .card:hover {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+}
+ 
+.question-name {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    color: #ff9787;
+}
+.answers {
+    padding: 25px 10px 10px;
+}
+.answers .custom-control {
+    margin-bottom: 10px;
+}
+.lesson-type {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    opacity: .5;
+}
+.custom-control-label {
+    background: #eee;
+    padding: 0 5px;
+    user-select: none;
+    cursor: pointer;
+}
+.code {
+	font-weight: 500;
+    background: #222;
+    padding: 20px 30px;
+    color: #9c8dff;
+    font-family: 'IBM Plex Mono', sans-serif;
+}
+.code .comment {
+	color: #aaa;
+}
+.code-colors {
+    color: #9c8dff;
+    background: #222;
+}
+.code-font {
+    font-family: 'IBM Plex Mono', sans-serif;
+    font-weight: 500;
+}
+.send-btn {
+    background: #ff9787 !important;
+    color: #fff !important;
+    font-weight: 500;
+}
+
+.navigation-text {
+    margin: 40px 0 0;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.navigation-text a {
+    margin: 0 20px;
+    display: inline-block;
+}
+
+.navigation-text i {
+    margin: 0 15px;
+}
+
+.navigation-text a {
+    color: #444;
+    transition: .3s;
+    display: inline-block;
+}
+
+.navigation-text a:hover {
+    color: #fa4e33;
+}
+
+.other .card {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.other h3:first-child {
+    margin-top: 0rem;
+}
+
+.other h3 {
+    margin-top: 2rem;
+}
+
+.other h4 {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.other p {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.other h4:before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    top: 0.6rem;
+    left: 0;
+    background: #fa4e33;
+}
+
+.book-img {
+    max-width: 300px;
+    margin: 1rem 1.5rem 2rem;
+}
+
+.card-title {
+    margin-bottom: .75rem;
+    font-size: 1.8rem;
+}
+
+#tests .card {
+    background-color: #fffaec !important;
+}
+
+.user-icon {
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    background-color: #fbfbfb;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.user-avatar {
+    width: 150px;
+    height: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    background-color: #fbfbfb;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.show-result {
+    display: inline;
+    font-weight: bold;
+    color: #494949;
+}
+
+.sum-result {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #494949;
+}
+
+.progress-bar {
+    background-color: #fa4e33;
+}
+
+#btn-delete {
+    min-width: 123.484px;
+}
+
+#btn-delete-account {
+    min-width: 214.03px;
+}
+
+body.modal-open .background-container{
+    -webkit-filter: blur(6px);
+    -moz-filter: blur(6px);
+    -o-filter: blur(6px);
+    -ms-filter: blur(6px);
+    filter: blur(6px);
+}

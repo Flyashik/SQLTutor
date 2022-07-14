@@ -1,0 +1,89 @@
+<?php session_start(); ?>
+<?php
+  if (isset($_SESSION['user']))
+    header('Location: /');
+?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sign Up</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+  <link rel="stylesheet" type="text/css" href="css/animate.css">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+  <!-- Favicon -->
+</head>
+
+<body>
+  <div class="wrap bg-light" id="center-form-section">
+    <form action="blocks/sign_up_script.php" method="post"
+      class="form-sign-in col-12 col-sm-6 col-md-5 col-lg-4 col-xl-2 m-auto text-center">
+      <a href="index.html">
+        <img class="mb-5" src="img/logo2.svg" width="80" alt="">
+      </a>
+      <h3 class="h3 font-weight-bold mb-4">Регистрация</h3>
+      <div class="form-group mb-2">
+        <input type="text" class="form-control" id="name" name="name" placeholder="Имя" minlength="2" maxlength="30">
+      </div>
+      <div class="form-group mb-2">
+        <input type="text" class="form-control" id="surname" name="surname" placeholder="Фамилия" minlength="2" maxlength="30">
+      </div>
+      <div class="form-group mb-2">
+        <?php if (isset($_SESSION['errors']['login'])) {
+          echo '<small style="color: red">' . $_SESSION['errors']['login'] . '</small>';
+          unset($_SESSION['errors']['login']);
+        }
+        ?>
+        <input type="text" class="form-control" id="login" name="login" placeholder="Логин" minlength="5" maxlength="25">
+      </div>
+      <div class="form-group mb-2">
+        <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" minlength="5" maxlength="50">
+        <?php if (isset($_SESSION['errors']['email'])) {
+          echo '<small style="color: red">' . $_SESSION['errors']['email'] . '</small>';
+          unset($_SESSION['errors']['email']);
+        }
+        ?>
+      </div>
+      <div class="form-group mb-2 text-left">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" minlength="8" maxlength="25">
+        <?php if (isset($_SESSION['errors']['password'])) {
+          echo '<small style="color: red">' . $_SESSION['errors']['password'] . '</small>';
+          unset($_SESSION['errors']['password']);
+        } else
+          echo '<small>Минимум 8 символов</small>';
+        ?>
+      </div>
+      <div class="form-group mb-4 text-left">
+        <input type="password" class="form-control" id="password_confirm" name="password_confirm"
+          placeholder="Подтвердите пароль" minlength="8" maxlength="25">
+        <?php if (isset($_SESSION['errors']['password_confirm'])) {
+          echo '<small style="color: red">' . $_SESSION['errors']['password_confirm'] . '</small>';
+          unset($_SESSION['errors']['password_confirm']);
+        }
+        ?>
+      </div>
+      <?php if (isset($_SESSION['errors']['user'])) {
+        echo '<small style="color: red">' . $_SESSION['errors']['user'] . '</small>';
+        unset($_SESSION['errors']['user']);
+      }
+      ?>
+      <button type="submit" class="btn btn-lg send-btn btn-block" id="accept-button" disabled="disabled">Зарегистрироваться</button>
+      <div class="form-group mt-4">
+        <a href="sign-in.html">Уже есть аккаунт?</a>
+      </div>
+    </form>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/input_text_checker.js"></script>
+  <?php if (isset($_SESSION['errors'])) unset($_SESSION['errors']); ?>
+</body>
+
+</html>

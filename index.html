@@ -1,0 +1,267 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Курс по SQL</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+  <link rel="stylesheet" type="text/css" href="css/animate.css">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+  <!-- Favicon -->
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img class="logo" src="img/logo1.svg" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav m-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Уроки
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Тесты
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                <a class="dropdown-item" href="test-5.html">Тест 5</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="other.html">Прочее</a>
+            </li>
+          </ul>
+          <?php if(!isset($_SESSION['user'])): ?>
+          <form class="form-inline my-2 my-lg-0">
+            <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+          </form>
+          <?php else: ?>
+          <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+            <img src="upload/<?=$_SESSION['user']['image_url']?>" class="rounded-circle" style="margin-right: 10px;" width="20px"
+              height="20px" alt="">
+            <?php echo $_SESSION['user']['first-name'] . " " . $_SESSION['user']['second-name']; ?>
+          </a>
+          <form class="form-inline my-2 my-lg-0">
+            <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+          </form>
+          <?php endif; ?>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="wrap">
+    <section id="main-screen" class="bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="hero d-table">
+            <div class="hero-text d-table-cell align-middle">
+              <div class="mb-4">
+                <img src="img/main.png" alt="">
+              </div>
+              <h1>Онлайн-курс по базам данных</h1>
+              <h3>Уроки и тесты по SQL</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="about" class="bg-light">
+      <div class="container">
+        <div class="section-title">
+          <h2>О проекте</h2>
+          <div class="subtitle">"SQL Tutor"</div>
+        </div>
+        <div class="section-content mt-5">
+          <div class="row align-items-center justify-content-between">
+            <div class="col-12 col-sm-6">
+              <img class="about-img" src="img/q1.jpg" alt="">
+            </div>
+            <div class="col-11 col-sm-5 mt-3 mt-sm-0 order-sm-first">
+              <p class="mt-4 mt-sm-0 about-text">SQL TUTOR — это электронный образовательный ресурс, предназначенный для
+                освоения знаний по языку программирования SQL.</p>
+              <p class="about-text">На сайте представлены теоритические уроки с определениями и примерами использования
+                операторов и SQL и тестовые задания для закрепления полученных знаний.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="lessons">
+      <div class="container">
+        <div class="section-title">
+          <h2>Каталог уроков</h2>
+          <div class="subtitle">Пошаговое освоение SQL</div>
+        </div>
+        <div class="section-content mt-5">
+          <div class="row justify-content-between">
+            <div class="col-12 col-md-6">
+              <a href="lesson-1.html" class="mb-4 d-block">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3 class="card-title">Введение в SQL <span class="subtitle">Урок 1</span></h3>
+                    <p class="card-text w-75">Реляционная база данных. Основные инструкции (операторы) SQL. </p>
+                  </div>
+                </div>
+              </a>
+              <a href="lesson-2.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Оператор SELECT <span class="subtitle">Урок 2</span></h3>
+                    <p class="card-text w-75">WHERE, AND/OR, IN/BETWEEN/LIKE, встроенные математические функции</p>
+                  </div>
+                </div>
+              </a>
+              <a href="lesson-3.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Группировка GROUP BY <span class="subtitle">Урок 3</span></h3>
+                    <p class="card-text w-75">Группировка строк по столбцу с помощью оператора GROUP BY</p>
+                  </div>
+                </div>
+              </a>
+              <a href="lesson-4.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Соединение JOIN <span class="subtitle">Урок 4</span></h3>
+                    <p class="card-text w-75">Присоединение таблиц в запросах с помощью оператора JOIN </p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6">
+              <a href="lesson-5.html" class="mb-4 d-block">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3 class="card-title">Подзапросы <span class="subtitle">Урок 5</span></h3>
+                    <p class="card-text w-75">Примеры использования подзапросов в различных командах </p>
+                  </div>
+                </div>
+              </a>
+              <a href="lesson-6.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">CREATE TABLE и INSERT <span class="subtitle">Урок 6</span></h3>
+                    <p class="card-text w-75">Создание таблиц CREATE TABLE, добавление строк в таблицу INSERT </p>
+                  </div>
+                </div>
+              </a>
+              <a href="lesson-7.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Оператор UPDATE <span class="subtitle">Урок 7</span></h3>
+                    <p class="card-text w-75">Изменение значений столбцов в существующих строках таблицы</p>
+                  </div>
+                </div>
+              </a>
+              <a href="lesson-8.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Оператор DELETE <span class="subtitle">Урок 8</span></h3>
+                    <p class="card-text w-75">Удаление строк таблицы по условию оператором DELETE </p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pt-3" id="tests">
+      <div class="container">
+        <div class="section-title">
+          <h2>Тестовые задания</h2>
+          <div class="subtitle">Тесты по учебным модулям</div>
+        </div>
+        <div class="section-content mt-5">
+          <div class="row justify-content-between">
+            <div class="col-12 col-md-6">
+              <a href="test-1.html" class="mb-4 d-block">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3 class="card-title">Введение в SQL <span class="subtitle">Тест 1</span></h3>
+                    <p class="card-text w-75">5 вопросов </p>
+                  </div>
+                </div>
+              </a>
+              <a href="test-2.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Оператор SELECT <span class="subtitle">Тест 2</span></h3>
+                    <p class="card-text w-75">8 вопросов</p>
+                  </div>
+                </div>
+              </a>
+              <a href="test-3.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">GROUP BY, JOIN <span class="subtitle">Тест 3</span></h3>
+                    <p class="card-text w-75">6 вопросов</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6">
+              <a href="test-4.html" class="mb-4 d-block">
+                <div class="card bg-light mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">Подзапросы <span class="subtitle">Тест 4</span></h3>
+                    <p class="card-text w-75">6 вопросов </p>
+                  </div>
+                </div>
+              </a>
+              <a href="test-5.html" class="mb-4 d-block">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3 class="card-title">INSERT, UPDATE, DELETE <span class="subtitle">Тест 5</span></h3>
+                    <p class="card-text w-75">7 вопросов </p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer class="bg-light text-center m-0 p-5">
+    <img class="mb-1 mt-4" width="200" src="img/logo1.svg">
+    <a href="#main-screen" class="nav-link">Вернуться наверх</a>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

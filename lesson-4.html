@@ -1,0 +1,175 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Урок 4. Соединение JOIN</title>
+   <link rel="stylesheet" type="text/css" href="css/reset.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+   <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+   <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+   <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+         <div class="container">
+            <a class="navbar-brand" href="index.html">
+               <img class="logo" src="img/logo1.svg" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav m-auto">
+                  <li class="nav-item">
+                     <a class="nav-link" href="index.html">Главная</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Уроки
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                        <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                        <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                        <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                        <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                        <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                        <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                        <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Тесты
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                        <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                        <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                        <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                        <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="other.html">Прочее</a>
+                  </li>
+               </ul>
+               <?php if(!isset($_SESSION['user'])): ?>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+               </form>
+               <?php else: ?>
+               <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+                  <?php
+              foreach ($_SESSION['user'] as $name => $value) {
+                $name = htmlspecialchars($name);
+                $value = htmlspecialchars($value);
+                $user[$name] = $value;
+              }
+            ?>
+                  <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;"
+                     width="20px" height="20px" alt="">
+                  <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+               </a>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+               </form>
+               <?php endif; ?>
+               </form>
+            </div>
+         </div>
+      </nav>
+   </header>
+   <section class="bg-light" id="top">
+      <div class="container">
+         <div class="row">
+            <h2 class="test-head">Урок 4. Соединение JOIN</h2>
+         </div>
+         <div class="row justify-content-center">
+            <div class="lesson col-12 mt-4 mb-5">
+               <div class="card card-body">
+                  <div class="lesson-text">
+                     <p>Соединение используется в операторе <span>SELECT</span> для получения ненормализованной таблицы,
+                        содержащей столбцы из нескольких исходных (соединяемых) таблиц, в которых хранятся логически
+                        связанные данные. Множество столбцов, выбранных из каждой таблицы, называется потоком.</p>
+
+                     <p>Правило соединения строк из нескольких таблиц в одну строку задается условием соединения.
+                        Соединения бывают внутренние и внешние. Внутреннее соединение объединяет два потока таким
+                        образом, что несоответствующие условию соединения строки в любом из потоков отбрасываются.
+                        Внешнее соединение выбирает строки участвующих таблиц, даже если в некоторых случаях не найдено
+                        соответствие. При этом отсутствующие элементы данных в соединении определяются как
+                        <span>NULL</span>. В каждом внешнем соединении различают левую и правую таблицу. В зависимости
+                        от того строки какой из таблиц будут включены в результирующую таблицу, даже если для них не
+                        найдено соответствие, различают левое, правое и полное внешнее соединение. В соединении могут
+                        участвовать не только разные таблицы. Возможно соединение таблицы самой с собой.</p>
+
+                     <p>Полный синтаксис описания соединения:</p>
+
+                     <div class="command">
+                        FROM "таблица" ["алиас"] { [INNER] | {LEFT | RIGHT | FULL} [OUTER] } JOIN <br>
+                        &nbsp;&nbsp;&nbsp;"таблица" ["алиас"] { [ON "условие соединения"["соединение"]<br>
+                     </div>
+
+                     <p>Если вид соединения не указан, то соединение –внутреннее, для внешнего соединения достаточно
+                        указать является ли оно левым, правым или полным. При использовании операции соединения может
+                        возникнуть коллизия имен столбцов (столбцы в разных таблицах имеют одинаковые имена). На уровне
+                        СУБД коллизия невозможна, т.к. полное имя столбца состоит из имени таблицы и имени столбца,
+                        разделенных точкой – это полный синтаксис именования столбца. Сокращенный синтаксис (указание
+                        только имени столбца) возможен, только если не возникает коллизия. Для упрощения написания
+                        полного имени столбца в операторе <span>SELECT</span> используется временное имя таблицы –
+                        алиас, он указывается непосредственно за именем таблицы в предложении FROM и может быть
+                        использован всюду в операторе <span>SELECT</span>.</p>
+
+                     <p><b>Пример.</b> Выдать список менеджеров отделов с указанием названия отдела.</p>
+
+                     <p><span class="highlight-code">SELECT FULL_NAME, DEPARTMENT<br>FROM DEPARTMENT A JOIN EMPLOYEE B
+                           ON A.MNGR_NO = B.EMP_NO;</span></p>
+
+                     <p>Т.к. в некоторых отделах менеджеров нет, они не будут участвовать в операции соединения и не
+                        попадут в результат запроса.</p>
+
+                     <p><b>Пример.</b> Выдать список всех отделов, указав полные имена управляющих (менеджеров).</p>
+
+                     <p><span class="highlight-code">SELECT DEPARTMENT, FULL_NAME<br>FROM DEPARTMENT A LEFT JOIN
+                           EMPLOYEE B ON A.MNGR_NO = B.EMP_NO;</span></p>
+
+                     <p>Или, поменяв местами таблицы в операции соединения:</p>
+
+                     <p><span class="highlight-code">SELECT DEPARTMENT, FULL_NAME FROM<br>EMPLOYEE A RIGHT JOIN
+                           DEPARTMENT B ON A.EMP_NO = B.MNGR_NO;</span></p>
+
+                     <p>Поскольку таблица <span>DEPARTMENT</span> участвует во внешнем соединении, в результат запроса
+                        попадут строки обо всех отделах, но для тех из них, у которых нет менеджера, в столбце
+                        <span>FULL_NAME</span> будет указано значение null.</p>
+
+                  </div>
+               </div>
+               <div class="navigation-text">
+                  <a href="lesson-3.html"><i class="fa fa-long-arrow-left"></i> Урок 3. Группировка GROUP BY</a>
+                  <a href="lesson-5.html"> Урок 5. Подзапросы<i class="fa fa-long-arrow-right"></i></a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+         <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+   </footer>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/main.js"></script>   
+</body>
+</html>

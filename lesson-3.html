@@ -1,0 +1,177 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Урок 3. Группировка GROUP BY</title>
+   <link rel="stylesheet" type="text/css" href="css/reset.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+   <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+   <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+   <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+         <div class="container">
+            <a class="navbar-brand" href="index.html">
+               <img class="logo" src="img/logo1.svg" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav m-auto">
+                  <li class="nav-item">
+                     <a class="nav-link" href="index.html">Главная</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Уроки
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                        <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                        <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                        <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                        <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                        <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                        <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                        <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Тесты
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                        <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                        <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                        <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                        <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="other.html">Прочее</a>
+                  </li>
+               </ul>
+               <?php if(!isset($_SESSION['user'])): ?>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+               </form>
+               <?php else: ?>
+               <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+                  <?php
+              foreach ($_SESSION['user'] as $name => $value) {
+                $name = htmlspecialchars($name);
+                $value = htmlspecialchars($value);
+                $user[$name] = $value;
+              }
+            ?>
+                  <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;"
+                     width="20px" height="20px" alt="">
+                  <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+               </a>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+               </form>
+               <?php endif; ?>
+               </form>
+            </div>
+         </div>
+      </nav>
+   </header>
+   <section class="bg-light" id="top">
+      <div class="container">
+         <div class="row">
+            <h2 class="test-head">Урок 3. Группировка GROUP BY</h2>
+         </div>
+         <div class="row justify-content-center">
+            <div class="lesson col-12 mt-4 mb-5">
+               <div class="card card-body">
+                  <div class="lesson-text">
+                     <p>Предложение <span>GROUP BY</span> оператора <span>SELECT</span> позволяет объединить строки
+                        получающейся в результате запроса таблицы в группы и выдать для каждой полученной группы
+                        обобщающую информацию. Группа формируется путем объединения всех строк, для которых столбец (или
+                        группа столбцов), указанный в предложении <span>GROUP BY</span>, имеет одинаковое значение.
+                        Столбец или группа столбцов, указанные в предложении <span>GROUP BY</span>, называются
+                        элементами группировки. На запросы, в которых используется группировка, накладываются
+                        дополнительные ограничения:</p>
+
+                     <div class="list important-text">
+                        <p>· В качестве элементов группировки могут быть использованы только столбцы таблицы или
+                           выражения, вычисляемые на основе значений в столбцах таблицы;</p>
+
+                        <p>· Столбцами таблицы, формируемой оператором SELECT, могут быть или элементы группировки, или
+                           константы, или выражения с использованием агрегатных функций для столбцов, не являющихся
+                           элементами группировки.</p>
+                     </div>
+
+                     <p>
+                        Агрегатными функциями являются <span>SUM()</span>, <span>MIN()</span>, <span>MAX()</span> и
+                        <span>AVG()</span>, о которых мы уже говорили ранее. В качестве аргумента в этих функциях может
+                        быть использован столбец или выражение, содержащее столбец, не являющийся элементом группировки.
+                        Функции <span>SUM()</span> и <span>AVG()</span> применимы только к столбцам, содержащим числовые
+                        данные. Функции <span>MIN()</span> и <span>MAX()</span>, кроме числовых значений могут
+                        обрабатывать данные типа «дата–время». При вычислении значений агрегатных функций отсутствующие
+                        значения (null–значения) игнорируются.</p>
+
+                     <p>
+                        Функция <span>COUNT()</span> в группирующих запросах также ведет себя как агрегатная функция. В
+                        случае использования <span>COUNT(*)</span> функция возвращает количество записей в группе. Если
+                        в качестве параметра функции <span>COUNT</span> используется имя столбца, не являющегося
+                        элементом группировки, функция вернет количество непустых значений в этом столбце для каждой из
+                        групп. Наконец, если совместно с указание имени столбца использовать <span>DISTINCT</span>,
+                        функция <span>COUNT()</span> вернет количество различных значений в группе для указанного
+                        столбца. При использовании группировки можно наложить дополнительное условие на результирующую
+                        таблицу, какие группы включать. Это условие задается предложением <span>HAVING</span>. Условие
+                        проверяется после того, как сформированы группы. Его рекомендуется применять, если условие
+                        отбора задается с помощью агрегатной функции. </p>
+
+                     <p>
+                        <b>Пример.</b> Определить суммарный бюджет каждого проекта в 1994 году из таблицы бюджетов
+                        проектов.
+                     </p>
+
+                     <p><span class="highlight-code"> SELECT PROJ_ID, SUM(PROJECTED_BUDGET) AS TOTAL_BUDGET<br>FROM
+                           PROJ_DEPT_BUDGET<br>WHERE FISCAL_YEAR=1994<br>GROUP BY PROJ_ID;</span></p>
+
+                     <p>
+                        <b>Пример.</b> Определить средний бюджет каждого проекта в 1995 году, указав количество отделов,
+                        принимающих участие в проекте.
+                     </p>
+
+                     <p><span class="highlight-code"> SELECT PROJ_ID, AVG(PROJECTED_BUDGET) AS TOTAL_BUDGET,
+                           COUNT(DEPT_NO) AS NUM_DEPARTMENTS<br>FROM PROJ_DEPT_BUDGET<br>WHERE FISCAL_YEAR=1995 GROUP BY
+                           PROJ_ID;</span></p>
+
+                  </div>
+               </div>
+               <div class="navigation-text">
+                  <a href="lesson-2.html"><i class="fa fa-long-arrow-left"></i> Урок 2. Оператор SELECT</a>
+                  <a href="lesson-4.html"> Урок 4. Соединение JOIN<i class="fa fa-long-arrow-right"></i></a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+         <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+   </footer>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/main.js"></script>   
+</body>
+</html>

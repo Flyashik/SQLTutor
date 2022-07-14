@@ -1,0 +1,170 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Урок 6. Операторы CREATE TABLE и INSERT</title>
+   <link rel="stylesheet" type="text/css" href="css/reset.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+   <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+   <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+   <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+         <div class="container">
+            <a class="navbar-brand" href="index.html">
+               <img class="logo" src="img/logo1.svg" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav m-auto">
+                  <li class="nav-item">
+                     <a class="nav-link" href="index.html">Главная</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Уроки
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                        <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                        <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                        <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                        <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                        <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                        <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                        <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Тесты
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                        <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                        <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                        <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                        <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="other.html">Прочее</a>
+                  </li>
+               </ul>
+               <?php if(!isset($_SESSION['user'])): ?>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+               </form>
+               <?php else: ?>
+               <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+                  <?php
+              foreach ($_SESSION['user'] as $name => $value) {
+                $name = htmlspecialchars($name);
+                $value = htmlspecialchars($value);
+                $user[$name] = $value;
+              }
+            ?>
+                  <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;"
+                     width="20px" height="20px" alt="">
+                  <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+               </a>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+               </form>
+               <?php endif; ?>
+               </form>
+            </div>
+         </div>
+      </nav>
+   </header>
+   <section class="bg-light" id="top">
+      <div class="container">
+         <div class="row">
+            <h2 class="test-head">Урок 6. Операторы CREATE TABLE и INSERT</h2>
+         </div>
+         <div class="row justify-content-center">
+            <div class="lesson col-12 mt-4 mb-5">
+               <div class="card card-body">
+                  <div class="lesson-text">
+                     <p>Оператор или инструкция <span>CREATE TABLE</span> позволяет создать таблицу и описывается
+                        следующим образом:</p>
+
+                     <p><span class="highlight-code">
+                           CREATE TABLE table_name (<br>
+                           &nbsp;&nbsp;&nbsp;columnl datatype,<br>
+                           &nbsp;&nbsp;&nbsp;column2 datatype,<br>
+                           &nbsp;&nbsp;&nbsp;column3 datatype,<br>
+                           &nbsp;&nbsp;&nbsp;...<br>
+                           );<br>
+                        </span></p>
+
+                     <p>Мы не будем подробно останавливаться на этой инструкции, так как она довольно сложная и имеет
+                        много тонкостей, а её подробное изучение выходит за рамки базового уровня.</p>
+
+                     <p>Оператор <span>INSERT</span> используется для добавления строк в одну таблицу. Возможна вставка
+                        одной строки, для которой список добавляемых значений столбцов указывается явно в виде списка
+                        констант. При этом количество добавляемых значений должно совпадать с количеством указанных столбцов.</p>
+
+                     <p><span class="highlight-code">
+                           INSERT INTO "таблица" [("список столбцов")]<br>
+                           &nbsp;&nbsp;&nbsp;VALUES ("список значений")<br>
+                        </span></p>
+
+                     <p>Другая форма оператора <span>INSERT</span> использует в качестве вставляемых строк результат
+                        подзапроса. В этом случае одним оператором <span>INSERT</span> можно добавить более одной
+                        строки.</p>
+
+                     <p><span class="highlight-code">
+                           INSERT INTO "таблица" [("список столбцов")]<br>
+                           &nbsp;&nbsp;&nbsp;(SELECT ...)<br>
+                        </span></p>
+
+                     <p><b>Пример.</b> Вставить в таблицу COUNTRY новую строку.</p>
+
+                     <p><span class="highlight-code">
+                           INSERT INTO COUNTRY(COUNTRY,CURRENCY)<br>
+                           &nbsp;&nbsp;&nbsp;('RUSSIA', 'RUB');<br>
+                        </span></p>
+                     <p><b>Пример.</b> Таблица SALES_ARH имеет структуру, полностью совпадающую со структурой таблицы
+                        SALES. Добавить в нее строки, содержащие информацию обо всех полностью закрытых заказах
+                        (поставка и оплата произведены).</p>
+
+                     <p><span class="highlight-code">
+                           INSERT INTO SALES_ARH<br>
+                           &nbsp;&nbsp;&nbsp;SELECT * FROM SALES<br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE SHIP_DATE IS NOT NULL AND PAID=’y’;<br>
+                        </span></p>
+                  </div>
+               </div>
+               <div class="navigation-text">
+                  <a href="lesson-5.html"><i class="fa fa-long-arrow-left"></i> Урок 5. Подзапросы</a>
+                  <a href="lesson-7.html"> Урок 7. Оператор UPDATE <i class="fa fa-long-arrow-right"></i></a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+         <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+   </footer>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/main.js"></script>
+</body>
+</html>

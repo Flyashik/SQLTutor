@@ -1,0 +1,454 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Тест 2. Оператор SELECT</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+  <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form action="blocks/sign_in_script.php" method="post" class="form-sign-in m-auto text-center">
+            <input type="hidden" name="sign_form_id" value="2">
+            <a href="index.html">
+              <img class="mb-5" src="img/logo2.svg" width="80" alt="">
+            </a>
+            <h3 class="h3 font-weight-bold mb-4">Авторизация</h3>
+            <div class="form-group mb-2">
+              <input type="login" class="form-control" id="login" name="login" placeholder="Логин">
+            </div>
+            <div class="form-group mb-4">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
+              <?php if(!isset($_SESSION['pass_upd'])): ?>
+              <a href="recovery-password.html" style="float: left; font-size: 15px;">Забыли пароль?</a>
+              <?php else: ?>
+              <?php 
+                  echo '<small style="color: green">' . $_SESSION['pass_upd'] . '</small>';
+                  unset($_SESSION['pass_upd']);
+              ?>
+              <?php endif; ?>
+            </div>
+            <?php if (isset($_SESSION['errors']['logpass'])) {
+              echo '<small style="color: red">' . $_SESSION['errors']['logpass'] . '</small>';
+              unset($_SESSION['errors']['logpass']);
+            } 
+            ?>
+            <button class="btn btn-lg send-btn btn-block" id="accept-button" type="submit" disabled>Войти</button>
+            <div class="form-group mt-4">
+              Нет аккаунта? <a href="sign-up.html">Зарегистрироваться</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="background-container">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="index.html">
+            <img class="logo" src="img/logo1.svg" alt="">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav m-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Главная</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Уроки
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                  <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                  <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                  <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                  <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                  <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                  <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                  <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Тесты
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                  <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                  <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                  <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                  <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="other.html">Прочее</a>
+              </li>
+            </ul>
+            <?php if(!isset($_SESSION['user'])): ?>
+            <form class="form-inline my-2 my-lg-0">
+              <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+            </form>
+            <?php else: ?>
+            <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+              <?php
+              foreach ($_SESSION['user'] as $name => $value) {
+                $name = htmlspecialchars($name);
+                $value = htmlspecialchars($value);
+                $user[$name] = $value;
+              }
+            ?>
+              <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;" width="20px"
+                height="20px" alt="">
+              <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+            </a>
+            <form class="form-inline my-2 my-lg-0">
+              <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+            </form>
+            <?php endif; ?>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <section class="bg-light" id="top">
+      <?php 
+        if(isset($_COOKIE['result']))
+          foreach($_COOKIE['result'] as $key => $value)
+            $result[$key] = $value;
+    ?>
+      <div class="container">
+        <form action="blocks/tests_proc.php" method="post" class="questions-form">
+          <input type="hidden" name="form_id" value="2" />
+          <div class="row">
+            <h2 class="test-head">Тест 2. Оператор SELECT</h2>
+          </div>
+          <div class="row justify-content-center">
+            <?php if(isset($result['sum'])): ?>
+            <div class="sum-result col-12 mt-4">
+              <?php echo $result['sum']; ?>
+            </div>
+            <?php endif; ?>
+            <div class="question col-12 mt-4 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 1</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Для чего предназначен оператор SELECT?</h5>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1" name="r1" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr1">Для создания таблиц в базе данных</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2" name="r1" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr2">Для изменения данных в таблице</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3" name="r1" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr3">Для выборки данных из таблиц</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr4" name="r1" value="4" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr4">Все выше перечисленное</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r1'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r1']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 2</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Какой оператор указывает на таблицу, из которой необходимо
+                    получить данные?</h5>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-2" name="r2" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr1-2">FROM</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-2" name="r2" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr2-2">HAVING</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-2" name="r2" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr3-2">UNION</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr4-2" name="r2" value="4" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr4-2">INCLUDE</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r2'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r2']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 3</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Что будет результатом такого запроса?</h5>
+                  <div class="command">
+                    SELECT * FROM workers
+                  </div>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-3" name="r3" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr1-3">Все пустые строки из таблицы
+                      workers</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-3" name="r3" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr2-3">Строки, содержащие символ «*» в таблице
+                      workers</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-3" name="r3" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr3-3">Таблица, со всеми данными в таблице
+                      workers</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r3'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r3']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 4</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Какой оператор позволяет отсортировать выводимые данные?</h5>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-4" name="r4" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr1-4">GROUP BY</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-4" name="r4" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr2-4">ORDER BY</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-4" name="r4" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr3-4">WHERE</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr4-4" name="r4" value="4" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr4-4">DISTINCT</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r4'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r4']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 5</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Что будет результатом данного запроса?</h5>
+                  <div class="command">
+                    SELECT * FROM workers WHERE country = 'Russia';
+                  </div>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-5" name="r5" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr1-5">Выведется строка «Russia»</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-5" name="r5" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr2-5">Выведутся все строки с работниками из
+                      таблицы workers</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-5" name="r5" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr3-5">Выведутся строки работников, страна
+                      которых Россия</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r5'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r5']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 6</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Какой оператор обозначает «не равно»?</h5>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-6" name="r6" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr1-6">OR</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-6" name="r6" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr2-6">
+                      <=< /label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-6" name="r6" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr3-6">=</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr4-6" name="r6" value="4" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr4-6">
+                      <>
+                    </label>
+                  </div>
+                </div>
+                <?php if(isset($result['r6'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r6']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 7</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Для чего используется команда BETWEEN?</h5>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-7" name="r7" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr1-7">Ищет по шаблону</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-7" name="r7" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr2-7">Сравнивает значение с несколькими
+                      возможными значениями</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-7" name="r7" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr3-7">Проверяет, находится ли значение в
+                      каком-то промежутке</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr4-7" name="r7" value="4" class="custom-control-input radio">
+                    <label class="custom-control-label" for="rr4-7">В SQL нет такой команды</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r7'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r7']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="question col-12 mb-5">
+              <div class="card card-body">
+                <div class="question-name">Вопрос 8</div>
+                <span class="lesson-type">Тест 2</span>
+                <article class="question-field">
+                  <h5 class="question-title">Какая из ниже перечисленных функций возвращает среднее значение
+                    среди строк?</h5>
+                </article>
+                <div class="answers">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr1-8" name="r8" value="1" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr1-8">AVG()</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr2-8" name="r8" value="2" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr2-8">COUNT()</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr3-8" name="r8" value="3" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr3-8">SUM()</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="rr4-8" name="r8" value="4" class="custom-control-input radio">
+                    <label class="custom-control-label code-font" for="rr4-8">MIN()</label>
+                  </div>
+                </div>
+                <?php if(isset($result['r8'])) : ?>
+                <div class="show-result">
+                  <?php echo $result['r8']; ?>
+                </div>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="col-12">
+              <?php if(!isset($_COOKIE['result'])): ?>
+              <button type="submit" id="subbutton" class="btn btn-lg send-btn" disabled="disabled">Отправить</button>
+              <?php else: ?>
+              <a href="test-2.html" class="btn btn-lg send-btn">Повторить попытку</a>
+              <?php endif; ?>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+        <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+    </footer>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/input_control_checker.js"></script>
+  <script src="js/save_inputs.js"></script>
+  <?php if(!isset($_SESSION['user'])): ?>
+  <script src="js/show_modal.js"></script>
+  <script src="js/input_text_checker.js"></script>
+  <?php endif; ?>
+  <?php 
+    if(isset($_SESSION['errors']))
+      unset($_SESSION['errors']);
+  ?>
+  <?php if(isset($_COOKIE['result'])): ?>
+  <script src="js/freeze_inputs.js"></script>
+  <?php endif; ?>
+</body>
+
+</html>

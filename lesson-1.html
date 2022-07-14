@@ -1,0 +1,181 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Урок 1. Введение в SQL</title>
+   <link rel="stylesheet" type="text/css" href="css/reset.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+   <link rel="stylesheet" type="text/css" href="css/adaptive.css">
+
+   <link rel="shortcut icon" href="img/fav.svg" type="image/svg+xml">
+</head>
+
+<body>
+   <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light pt-3 pb-3 fixed-top">
+         <div class="container">
+            <a class="navbar-brand" href="index.html">
+               <img class="logo" src="img/logo1.svg" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav m-auto">
+                  <li class="nav-item">
+                     <a class="nav-link" href="index.html">Главная</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Уроки
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="lesson-1.html">Урок 1</a>
+                        <a class="dropdown-item" href="lesson-2.html">Урок 2</a>
+                        <a class="dropdown-item" href="lesson-3.html">Урок 3</a>
+                        <a class="dropdown-item" href="lesson-4.html">Урок 4</a>
+                        <a class="dropdown-item" href="lesson-5.html">Урок 5</a>
+                        <a class="dropdown-item" href="lesson-6.html">Урок 6</a>
+                        <a class="dropdown-item" href="lesson-7.html">Урок 7</a>
+                        <a class="dropdown-item" href="lesson-8.html">Урок 8</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Тесты
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="test-1.html">Тест 1</a>
+                        <a class="dropdown-item" href="test-2.html">Тест 2</a>
+                        <a class="dropdown-item" href="test-3.html">Тест 3</a>
+                        <a class="dropdown-item" href="test-4.html">Тест 4</a>
+                        <a class="dropdown-item" href="test-5.html">Тест 5</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="other.html">Прочее</a>
+                  </li>
+               </ul>
+               <?php if(!isset($_SESSION['user'])): ?>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="sign-in.html" class="btn btn-outline-success my-2 my-sm-0">Авторизация</a>
+               </form>
+               <?php else: ?>
+               <a href="account.html" class="btn btn-outline-success my-2 my-sm-0" style="border-bottom: none">
+                  <?php
+                     foreach ($_SESSION['user'] as $name => $value) {
+                        $name = htmlspecialchars($name);
+                        $value = htmlspecialchars($value);
+                        $user[$name] = $value;
+                     }
+                  ?>
+                  <img src="upload/<?=$user['image_url']?>" class="rounded-circle" style="margin-right: 10px;"
+                     width="20px" height="20px" alt="">
+                  <?php echo $user['first-name'] . " " . $user['second-name']; ?>
+               </a>
+               <form class="form-inline my-2 my-lg-0">
+                  <a href="blocks/sign-out.php" class="btn btn-outline-success my-2 my-sm-0">Выйти</a>
+               </form>
+               <?php endif; ?>
+               </form>
+            </div>
+         </div>
+      </nav>
+   </header>
+   <section class="bg-light" id="top">
+      <div class="container">
+         <div class="row">
+            <h2 class="test-head">Урок 1. Введение в SQL</h2>
+         </div>
+         <div class="row justify-content-center">
+            <div class="lesson col-12 mt-4 mb-5">
+               <div class="card card-body">
+                  <div class="lesson-text">
+                     <p>Структурированный язык запросов SQL (Structured Query Language) является языком, предназначенным
+                        для обработки и извлечения данных, содержащихся в базе данных.</p>
+
+                     <p>Язык SQL является реляционно-полным. Это означает, что любой оператор реляционной алгебры может
+                        быть выражен подходящим оператором SQL.</p>
+
+                     <p><span class="highlight-text">Реляционная база данных</span> – это коллекция таблиц (и связей
+                        между ними). Таблица – это просто коллекция строк, почти как матрицы. Однако таблица имеет
+                        ассоциированную с ней закрепленную схему, состоящую из имен и типов столбцов.</p>
+
+                     <p>В настоящий момент язык SQL представляет собой нечто гораздо большее, чем простой инструмент
+                        создания запросов, хотя первоначально он именно для этого был и предназначен. Сейчас этот язык
+                        используется для реализации всех функциональных возможностей, которые СУБД предоставляет
+                        пользователю, а именно:</p>
+
+                     <div class="list important-text">
+                        <p>1. SQL дает возможность изменять структуру представления данных, а также устанавливать
+                           отношения между элементами базы данных, т.е. реализует функцию организации данных. </p>
+
+                        <p>2. SQL позволяет манипулировать данными, т.е. читать данные из базы данных, добавлять новые
+                           данные, удалять или изменять уже имеющиеся в базе данные. При этом реализуются функции чтения
+                           и обработки данных.</p>
+
+                        <p>3. С помощью SQL можно защитить данные от несанкционированного доступа. Это обеспечивается
+                           средствами авторизации доступа.</p>
+
+                        <p>4. SQL позволяет координировать совместное использование данных многими пользователями,
+                           работающими параллельно, чтобы они не мешали друг другу. Это функция совместного
+                           использования данных.</p>
+
+                        <p>5. SQL позволяет обеспечить целостность базы данных, защищая ее от разрушения из-за ошибок
+                           пользователей, несогласованных изменений или отказа систем.</p>
+                     </div>
+
+                     <p>Команды SQL обычно называют инструкциями или операторами. С их помощью вы можете изменять,
+                        добавлять, заменять, удалять, выбирать необходимые данные.</p>
+
+                     <p class="text-title">Вот список основных инструкций (операторов) языка SQL:</p>
+
+                     <div class="command">
+                        · <span>CREATE TABLE</span> – создать таблицу <br>
+
+                        · <span>SELECT</span> – оператор запроса <br>
+
+                        · <span>INSERT</span> – вставить строки в таблицу <br>
+
+                        · <span>UPDATE</span> – изменить строки в таблице <br>
+
+                        · <span>DELETE</span> – удалить строки в таблице <br>
+
+                        · <span>GROUP BY</span> – сгруппировать строки <br>
+
+                        · <span>ORDER BY</span> – отсортировать строки <br>
+
+                        · <span>JOIN</span> – операция соединения <br>
+
+                        · Подзапросы <br>
+                     </div>
+                     <p>В дальнейших уроках мы более подробно разберем каждый оператор SQL.</p>
+                  </div>
+               </div>
+               <div class="navigation-text">
+                  <a href="lesson-2.html">Урок 2. Оператор SELECT <i class="fa fa-long-arrow-right"></i>
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>
+   </section>
+   <footer class="bg-light text-center m-0 p-5">
+      <div class="mb-1 mt-4">
+         <img class="logo" src="img/logo1.svg" alt="">
+      </div>
+      <a href="#top" class="nav-link">Вернуться наверх</a>
+   </footer>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/main.js"></script>   
+</body>
+</html>
